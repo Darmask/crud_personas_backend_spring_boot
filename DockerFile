@@ -1,0 +1,10 @@
+FROM adoptopenjdk/openjdk11:alpine-jre
+ARG TIMEZONE="America/Bogota"
+RUN apk add tzdata
+RUN cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+RUN "date"
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
